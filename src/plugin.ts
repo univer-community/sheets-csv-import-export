@@ -12,13 +12,12 @@ import {
 } from "@univerjs/core";
 import { UniverSheetsPlugin } from "@univerjs/sheets";
 import { defaultPluginConfig, CSV_IMPORT_EXPORT_PLUGIN_CONFIG_KEY } from "./config/config";
-import { SHEETS_CSV_IMPORT_EXPORT_PLUGIN } from "./constants";
 import { CsvImportExportService } from "./services/csv-import-export.service";
 import { CsvCodecService } from "./services/csv-codec.service";
 
 @DependentOn(UniverSheetsPlugin)
 export class UniverSheetsCsvImportExportPlugin extends Plugin {
-  static override pluginName = SHEETS_CSV_IMPORT_EXPORT_PLUGIN;
+  static override pluginName = "SHEETS_CSV_IMPORT_EXPORT_PLUGIN";
   static override packageName = "@univer-community/sheets-csv-import-export";
   static override type = UniverInstanceType.UNIVER_SHEET;
 

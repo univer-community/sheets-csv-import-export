@@ -1,4 +1,3 @@
-import { CSV_CONTENT_TYPE } from "../constants";
 import type { CsvLineBreak, ICsvDecodedText } from "../types";
 
 const UTF8_BOM = [0xef, 0xbb, 0xbf];
@@ -109,13 +108,13 @@ export function encodeUtf8Csv(text: string, includeBom: boolean): Blob {
   const payload = encoder.encode(text);
 
   if (!includeBom) {
-    return new Blob([payload], { type: CSV_CONTENT_TYPE });
+    return new Blob([payload], { type: "text/csv;charset=utf-8" });
   }
 
   const withBom = new Uint8Array(UTF8_BOM.length + payload.length);
   withBom.set(UTF8_BOM, 0);
   withBom.set(payload, UTF8_BOM.length);
-  return new Blob([withBom], { type: CSV_CONTENT_TYPE });
+  return new Blob([withBom], { type: "text/csv;charset=utf-8" });
 }
 
 function escapeCsvField(value: unknown, delimiter: string): string {

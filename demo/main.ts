@@ -21,8 +21,6 @@ import SheetsFormulaUIEnUS from "@univerjs/sheets-formula-ui/locale/en-US";
 import SheetsNumfmtUIEnUS from "@univerjs/sheets-numfmt-ui/locale/en-US";
 import SheetsUIEnUS from "@univerjs/sheets-ui/locale/en-US";
 
-import { CSV_CONTENT_TYPE } from "../src/constants";
-
 import "@univerjs/design/lib/index.css";
 import "@univerjs/ui/facade";
 import "@univerjs/ui/lib/index.css";
@@ -83,7 +81,7 @@ document.getElementById("facade-import")?.addEventListener("click", async () => 
 
 document.getElementById("facade-export")?.addEventListener("click", async () => {
   const blob = activeSheet.exportCsv({ includeBom: true, fileName: "facade-export.csv" });
-  const nativeBlob = new Blob([toBlobPart(await blob.getBytes())], { type: CSV_CONTENT_TYPE });
+  const nativeBlob = new Blob([toBlobPart(await blob.getBytes())], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(nativeBlob);
   const link = document.createElement("a");
   link.href = url;
