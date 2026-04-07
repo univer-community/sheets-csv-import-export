@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Univer Plugin Demo</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      #toolbar {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(16, 36, 63, 0.12);
+        backdrop-filter: blur(12px);
+      }
+
+      #app {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toolbar">
+      <button id="facade-import">Importing with Facade API</button>
+      <button id="facade-export">Exporting with Facade API</button>
+    </div>
+    <div id="app"></div>
+    <script type="module" src="/main.ts"></script>
+  </body>
+</html>

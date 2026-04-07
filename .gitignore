@@ -1,0 +1,16 @@
+node_modules/
+dist/
+demo-dist/
+lib/
+coverage/
+.turbo/
+.cache/
+.tmp/
+tmp/
+*.log
+.DS_Store
+.vitest/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
