@@ -3,24 +3,12 @@ import path from "node:path";
 import process from "node:process";
 import { build as tsdownBuild } from "tsdown";
 
-const OUTPUT_DIRECTORIES = ["lib/es", "lib/cjs"];
-
-function collectEntries() {
-  return [
-    ["index", "src/index.ts"],
-    ["plugin", "src/plugin.ts"],
-    ["ui-plugin", "src/ui-plugin.ts"],
-    ["facade", "src/facade/index.ts"],
-    ["locale/en-US", "src/locale/en-US.ts"],
-  ];
-}
+const OUTPUT_DIRECTORY = "lib";
 
 function cleanup() {
-  for (const directory of OUTPUT_DIRECTORIES) {
-    const resolved = path.resolve(directory);
-    if (existsSync(resolved)) {
-      rmSync(resolved, { force: true, recursive: true });
-    }
+  const resolved = path.resolve(OUTPUT_DIRECTORY);
+  if (existsSync(resolved)) {
+    rmSync(resolved, { force: true, recursive: true });
   }
 }
 
@@ -29,7 +17,14 @@ function collectExternalPackages() {
   return [...Object.keys(packageJson.dependencies ?? {}), ...Object.keys(packageJson.peerDependencies ?? {})];
 }
 
-async function buildProject(args: string[]) {
+function collectEntries() {
+  return [
+    { key: "index", path: "src/index.ts" },
+    { key: "facade", path: "src/facade/index.ts" },
+  ];
+}
+
+async function buildProject(args) {
   if (args.includes("--cleanup")) {
     cleanup();
   }
@@ -37,25 +32,26 @@ async function buildProject(args: string[]) {
   const externalPackages = collectExternalPackages();
   const entries = collectEntries();
   const outputs = [
-    { format: "esm" as const, outDir: "lib/es" },
-    { format: "cjs" as const, outDir: "lib/cjs" },
+    { format: "esm", outDir: "lib/es" },
+    { format: "cjs", outDir: "lib/cjs" },
   ];
 
   await Promise.all(
-    entries.flatMap(([key, entryPath]) => {
+    entries.flatMap((entry) => {
       return outputs.map(({ format, outDir }) =>
         tsdownBuild({
           clean: false,
           dts: false,
-          entry: { [key]: entryPath },
+          entry: { [entry.key]: entry.path },
           format,
           outDir,
-          sourcemap: true,
           deps: {
             neverBundle: externalPackages,
           },
+          outExtensions: () => ({ js: ".js" }),
           outputOptions: {
-            codeSplitting: true,
+            codeSplitting: false,
+            entryFileNames: "[name].js",
             minify: true,
           },
         }),
@@ -64,11 +60,19 @@ async function buildProject(args: string[]) {
   );
 }
 
-const [command, ...args] = process.argv.slice(2);
+async function main() {
+  const [command, ...args] = process.argv.slice(2);
 
-if (!command || command === "build") {
-  await buildProject(args);
-} else {
+  if (!command || command === "build") {
+    await buildProject(args);
+    return;
+  }
+
   process.stderr.write(`Unknown command: ${command}\n`);
   process.exitCode = 1;
 }
+
+main().catch((error) => {
+  process.stderr.write(`${error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`);
+  process.exitCode = 1;
+});

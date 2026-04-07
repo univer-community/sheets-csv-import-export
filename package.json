@@ -10,10 +10,12 @@
   "homepage": "https://github.com/univer-community",
   "license": "MIT",
   "author": "白熱 <sonne@asaki.me>",
+  "directories": {
+    "lib": "lib"
+  },
   "files": [
     "lib"
   ],
-  "type": "module",
   "main": "./src/index.ts",
   "types": "./lib/types/index.d.ts",
   "exports": {
@@ -52,7 +54,7 @@
   "scripts": {
     "prepare": "simple-git-hooks",
     "build": "pnpm run build:bundle && pnpm run build:types",
-    "build:bundle": "node --import tsx/esm ./scripts/build.ts build --cleanup",
+    "build:bundle": "node ./scripts/build.mjs build --cleanup",
     "build:demo": "vite build --config vite.demo.config.ts",
     "build:types": "tsc -p tsconfig.node.json",
     "coverage": "vitest run --coverage",
