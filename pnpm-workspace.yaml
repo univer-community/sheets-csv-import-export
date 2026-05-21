@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: false
+  protobufjs: false
+  simple-git-hooks: true
+minimumReleaseAgeExclude:
+  - vite@8.0.14
