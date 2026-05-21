@@ -1,6 +1,6 @@
 {
   "name": "@univer-community/sheets-csv-import-export",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "description": "A plugin for importing and exporting CSV files in Univer Sheets.",
   "keywords": [
     "export",
